@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Downloader de Playlist</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #e0f7fa, #ffffff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: white;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    h2 {
+      color: #00796B;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+
+    input[type="text"] {
+      padding: 12px 16px;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    input[type="text"]:focus {
+      border-color: #00796B;
+      outline: none;
+    }
+
+    button {
+      padding: 12px 20px;
+      background-color: #00796B;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #004D40;
+    }
+
+    #status {
+      margin-top: 20px;
+      font-size: 0.95rem;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Insira o link da playlist do YouTube:</h2>
+    <input type="text" id="playlistUrl" placeholder="Cole o link da playlist aqui..." />
+    <button onclick="baixar()">Baixar Playlist</button>
+    <p id="status"></p>
+  </div>
+
+  <script>
+    const { ipcRenderer } = require('electron');
+
+    function baixar() {
+      const url = document.getElementById('playlistUrl').value;
+      document.getElementById('status').innerText = "Baixando...";
+      ipcRenderer.send('download-playlist', url);
+    }
+
+    ipcRenderer.on('download-complete', (event, zipPath) => {
+      document.getElementById('status').innerHTML = `✅ Download concluído:<br><code>${zipPath}</code>`;
+    });
+
+    ipcRenderer.on('download-error', (event, error) => {
+      document.getElementById('status').innerText = "❌ Erro: " + error;
+    });
+  </script>
+</body>
+</html>
