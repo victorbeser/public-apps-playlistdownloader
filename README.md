@@ -3,7 +3,9 @@ Faça download de centenas de músicas de playlists do youtube!
 ![image](https://github.com/user-attachments/assets/bc89bf45-a8c9-4596-82e0-0b03c07db187)
 
 Requisitos:
+
 Node JS
+
 yt-dlp.exe
 
 Como usar?
